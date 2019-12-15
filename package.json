@@ -1,0 +1,35 @@
+{
+  "name": "basket",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "antd": "^3.19.2",
+    "axios": "^0.19.0",
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "dotenv": "^8.2.0",
+    "js-cookie": "^2.2.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "node-sass": "^4.13.0",
+    "pg": "^7.11.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "0.9.5"
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.19.1"
+  },
+  "scripts": {
+    "start": "concurrently \"react-scripts start\" \"nodemon src/server/index.js\"",
+    "server": "nodemon src/server/index.js",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "proxy": "http://localhost:3001/"
+}

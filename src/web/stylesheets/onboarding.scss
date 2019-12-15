@@ -1,0 +1,32 @@
+.onboarding {
+  background-color: #f9f9f9;
+  width: 100%;
+  height: calc(100% - 64px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.onboarding__card {
+  background-color: #fff;
+  min-width: 480px;
+  border-radius: 10px;
+}
+
+.onboarding__form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.onboarding__form-title {
+  margin-bottom: 20px;
+}
+
+.onboarding__footer {
+  border-top: 1px solid #e8e8e8;
+}
+
+.onboarding__footer-text {
+  margin-top: 24px;
+  text-align: center;
+}

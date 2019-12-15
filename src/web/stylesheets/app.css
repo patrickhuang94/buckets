@@ -1,0 +1,33 @@
+@import '~antd/dist/antd.css';
+
+@import './form.scss';
+@import './onboarding.scss';
+@import './players.scss';
+@import './headers.scss';
+@import './team.scss';
+@import './sidebar.scss';
+@import './search.scss';
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  display: flex;
+  height: 100vh;
+}
+
+.app__full-container {
+  display: flex;
+  width: 100vw;
+}
+
+.app__container {
+  background-color: #f9f9f9;
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+}

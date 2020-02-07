@@ -1,32 +1,29 @@
 import React, { useState, useContext } from 'react'
+import axios from 'axios'
 import normalizeAxios from '../services/normalizeAxios'
 import { Select, Input } from 'antd'
 import { store } from '../store'
 
 function Search() {
   const [name, setName] = useState('')
+  const [profile, setProfile] = useState('')
   const { dispatch } = useContext(store)
   // const [season, setSeason] = useState('')
   // const [playerInfo, setPlayerInfo] = useState(null)
 
   const handleChangeName = e => setName(e.target.value)
+  const handleChangeProfile = e => setProfile(e.target.value)
   // const handleChangeSeason = value => setSeason(value)
 
   const onSubmit = async e => {
     e.preventDefault()
-    const request = {
+    const playerRequest = {
       method: 'GET',
       url: `/player/stats?name=${name}`
     }
-    const player = await normalizeAxios(request)
+    const player = await normalizeAxios(playerRequest)
     dispatch({ type: 'FIND_PLAYER', payload: player })
-    // setPlayerInfo(player)
   }
-
-  // function renderPlayer() {
-  //   if (!playerInfo) return null
-  //   return <PlayerTable stats={playerInfo.playerStats} />
-  // }
 
   return (
     <div className="search__container">
@@ -44,7 +41,6 @@ function Search() {
         </Select> */}
         <input type="submit" value="Find player stats" />
       </form>
-      {/* {renderPlayer()} */}
     </div>
   )
 }

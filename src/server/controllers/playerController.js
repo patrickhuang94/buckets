@@ -1,4 +1,24 @@
 const axios = require('axios')
+const nba = require('nba')
+
+async function getPlayerByName({ name }) {
+  const player = await axios({
+    method: 'GET',
+    url: `https://www.balldontlie.io/api/v1/players?search=${name}`
+  })
+
+  const normalizedPlayer = player.data.data
+  if (!normalizedPlayer) {
+    throw new Error(`Player name not found: ${name}`)
+  }
+
+  return normalizedPlayer[0]
+}
+
+async function getProfile({ player }) {
+  const player = nba.findPlayer(player)
+  return player
+}
 
 async function getStats({ player, season = 2019 }) {
   if (!player) {
@@ -33,27 +53,10 @@ async function getAverage({ player, season = 2019 }) {
     method: 'GET',
     url: `https://www.balldontlie.io/api/v1/season_averages?player_ids[]=${playerId}&seasons[]=${season}`
   })
-
-  console.log({ playerAverages })
-
-  // const normalizedPlayerAverages =
-}
-
-async function getPlayerByName({ name }) {
-  const player = await axios({
-    method: 'GET',
-    url: `https://www.balldontlie.io/api/v1/players?search=${name}`
-  })
-
-  const normalizedPlayer = player.data.data
-  if (!normalizedPlayer) {
-    throw new Error(`Player name not found: ${name}`)
-  }
-
-  return normalizedPlayer[0]
 }
 
 module.exports = {
   getStats,
-  getAverage
+  getAverage,
+  getProfile
 }

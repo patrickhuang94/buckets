@@ -3,15 +3,16 @@ import { useHistory } from 'react-router-dom'
 import normalizeAxios from '../services/normalizeAxios'
 import { Form, Input, Button } from 'antd'
 const { Item } = Form
-import useForm from '../hooks/useForm'
 import { store } from '../store'
 
 function LoginForm() {
   const history = useHistory()
+  const [fields, setFields] = useState({})
   const [error, setError] = useState(null)
   const { dispatch } = useContext(store)
 
   const submitForm = async () => {
+    event.preventDefault()
     const request = {
       method: 'POST',
       url: '/auth/login',
@@ -23,7 +24,6 @@ function LoginForm() {
 
     try {
       const user = await normalizeAxios(request)
-      console.log({ user })
       dispatch({ type: 'LOG_IN', payload: user })
       history.push('/')
     } catch (err) {
@@ -32,8 +32,13 @@ function LoginForm() {
     }
   }
 
-  // FIXME
-  const [fields, handleChange, handleSubmit] = useForm(submitForm)
+  const handleChange = (event, name) => {
+    event.persist()
+    setFields({
+      ...fields,
+      [name]: event.target.value
+    })
+  }
 
   const formInputItem = ({ label, placeholder, value, name, type }) => (
     <Item>
@@ -48,7 +53,7 @@ function LoginForm() {
   )
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={submitForm}>
       {formInputItem({
         label: 'Email',
         name: 'email',

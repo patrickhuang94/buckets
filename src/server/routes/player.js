@@ -24,4 +24,15 @@ router.get('/average', async function(req, res) {
   }
 })
 
+router.get('/profile', async function(req, res) {
+  const player = req.query.name
+  console.log('player: ', player)
+  try {
+    const playerProfile = await PlayerController.getProfile({ player })
+    res.status(200).send(playerProfile)
+  } catch (err) {
+    res.status(500).send(err)
+  }
+})
+
 module.exports = router

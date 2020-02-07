@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { Button } from 'antd'
+import classNames from 'classnames'
 
 import { store } from '../store'
 import Search from '../search'
@@ -11,7 +12,11 @@ function Header() {
   const cookie = Cookies.get('token')
 
   return (
-    <div className="header">
+    <div
+      className={classNames('header', {
+        'header__flex-end': !cookie
+      })}
+    >
       {cookie ? (
         <React.Fragment>
           <Search />

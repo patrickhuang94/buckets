@@ -7,8 +7,11 @@
     "axios": "^0.19.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.3",
     "classnames": "^2.2.6",
     "cookie-parser": "^1.4.4",
+    "db-migrate": "^0.11.6",
+    "db-migrate-pg": "^1.0.0",
     "dotenv": "^8.2.0",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
@@ -20,7 +23,8 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "0.9.5"
+    "react-scripts": "0.9.5",
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "concurrently": "^4.1.0",
@@ -31,7 +35,8 @@
     "server": "nodemon src/server/index.js",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "scrape": "node -e 'require(\"./src/server/scraper\").runScript()'"
   },
   "proxy": "http://localhost:3001/"
 }

@@ -13,22 +13,13 @@ router.get('/stats', async function(req, res) {
   }
 })
 
-router.get('/average', async function(req, res) {
-  const player = req.query.name
-  const season = req.query.season
-  try {
-    const playerStats = await PlayerController.getAverage({ player, season })
-    res.status(200).send(playerStats)
-  } catch (err) {
-    res.status(500).send(err)
-  }
-})
-
 router.get('/profile', async function(req, res) {
-  const player = req.query.name
-  console.log('player: ', player)
+  const first_name = req.query.first_name
+
+  // TODO: add look up by last_name
+
   try {
-    const playerProfile = await PlayerController.getProfile({ player })
+    const playerProfile = await PlayerController.getProfile({ first_name })
     res.status(200).send(playerProfile)
   } catch (err) {
     res.status(500).send(err)

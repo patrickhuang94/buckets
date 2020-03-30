@@ -5,7 +5,6 @@ const config = {
   port: '5432',
   database: 'db_development',
   user: 'patrick',
-  password: '22b2e240931f49f677e41db0c14d16e1'
 }
 
 const connect = async () => {
@@ -14,9 +13,7 @@ const connect = async () => {
     if (err) {
       console.error(`connection error: ${err.stack}`)
     } else {
-      console.log(
-        `connected to database ${config.database} on ${config.host}:${config.port} with user ${config.user}`
-      )
+      console.log(`connected to database ${config.database} on ${config.host}:${config.port} with user ${config.user}`)
     }
   })
   return client
@@ -28,5 +25,5 @@ module.exports = {
     const result = await client.query(query, params)
     console.log(`query rows: ${JSON.stringify(result.rows)}`)
     return result.rows
-  }
+  },
 }

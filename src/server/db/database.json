@@ -4,7 +4,6 @@
     "host": "localhost",
     "port": "5432",
     "user": "patrick",
-    "database": "db_development",
-    "password": "22b2e240931f49f677e41db0c14d16e1"
+    "database": "db_development"
   }
 }

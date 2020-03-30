@@ -19,11 +19,11 @@
     "moment": "^2.24.0",
     "node-sass": "^4.13.0",
     "pg": "^7.11.0",
+    "puppeteer": "^2.1.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "0.9.5",
-    "request": "^2.88.0"
+    "react-scripts": "0.9.5"
   },
   "devDependencies": {
     "concurrently": "^4.1.0",
@@ -34,8 +34,7 @@
     "server": "nodemon src/server/index.js",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "scrape": "node -e 'require(\"./src/server/scraper\").runScript()'"
+    "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:3001/"
 }

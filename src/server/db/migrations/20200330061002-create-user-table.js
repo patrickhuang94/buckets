@@ -4,7 +4,7 @@ exports.up = function(db) {
     email: { type: 'string', notNull: true },
     password: { type: 'string', notNull: true },
     first_name: { type: 'string', notNull: true },
-    last_name: { type: 'string', notNull: true }
+    last_name: { type: 'string', notNull: true },
   })
 }
 

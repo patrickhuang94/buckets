@@ -18,7 +18,7 @@ async function signUp({ email, password, first_name, last_name }) {
     throw new Error('Email or password do not satisfy requirements')
   }
 
-  const saltRounds = 10 // higher number = more hashing rounds
+  const saltRounds = 10
   const hash = await new Promise((resolve, reject) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
       if (err) reject(err)
@@ -30,7 +30,7 @@ async function signUp({ email, password, first_name, last_name }) {
     first_name,
     last_name,
     email,
-    password: hash
+    password: hash,
   })
 }
 
@@ -49,11 +49,11 @@ async function login({ email, password }) {
   const token = generateToken(email)
   return {
     token,
-    user
+    user,
   }
 }
 
 module.exports = {
   signUp,
-  login
+  login,
 }

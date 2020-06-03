@@ -1,10 +1,11 @@
 const axios = require('axios')
 const Player = require('../models/player')
+const Team = require('../models/team')
 
 async function getPlayerByName({ name }) {
   const player = await axios({
     method: 'GET',
-    url: `https://www.balldontlie.io/api/v1/players?search=${name}`
+    url: `https://www.balldontlie.io/api/v1/players?search=${name}`,
   })
 
   const normalizedPlayer = player.data.data
@@ -24,7 +25,7 @@ async function getStats({ player, season = 2019 }) {
   const playerId = foundPlayer.id
   const playerStats = await axios({
     method: 'GET',
-    url: `https://www.balldontlie.io/api/v1/stats?player_ids[]=${playerId}&seasons[]=${season}`
+    url: `https://www.balldontlie.io/api/v1/stats?player_ids[]=${playerId}&seasons[]=${season}`,
   })
 
   const normalizedPlayerStats = playerStats.data.data.sort((a, b) => {
@@ -35,7 +36,7 @@ async function getStats({ player, season = 2019 }) {
 
   return {
     playerStats: normalizedPlayerStats,
-    player: foundPlayer
+    player: foundPlayer,
   }
 }
 
@@ -48,7 +49,43 @@ async function getProfile({ first_name, last_name }) {
   return playerProfile
 }
 
+async function createPlayer({ name, image, team_id }) {
+  if (!name || !image || !team_id) {
+    throw new Error('Missing player name, image, or team.')
+  }
+
+  Player.create({
+    name,
+    image,
+    team_id,
+  })
+}
+
+async function updatePlayer({ name, team_id }) {
+  if (!name || !team_id) {
+    throw new Error('Missing player name or team.')
+  }
+
+  Player.update({ name, team_id })
+}
+
+async function findPlayer({ name }) {
+  if (!name) {
+    throw new Error('Missing player name.')
+  }
+
+  return Player.find({ name })
+}
+
+async function findAllPlayers() {
+  return Player.findAll()
+}
+
 module.exports = {
   getStats,
-  getProfile
+  getProfile,
+  createPlayer,
+  updatePlayer,
+  findPlayer,
+  findAllPlayers,
 }

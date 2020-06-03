@@ -1,12 +1,13 @@
 @import '~antd/dist/antd.css';
 
+@import './dashboard.scss';
 @import './form.scss';
 @import './onboarding.scss';
 @import './players.scss';
 @import './headers.scss';
 @import './team.scss';
 @import './sidebar.scss';
-@import './search.scss';
+@import './button.scss';
 
 body {
   margin: 0;
@@ -24,8 +25,9 @@ body {
 }
 
 .app__container {
-  background-color: #f9f9f9;
+  background-color: #f5f6fa;
   width: 100%;
+  height: 100%;
 }
 
 .container {

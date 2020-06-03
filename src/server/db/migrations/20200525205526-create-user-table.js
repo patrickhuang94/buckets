@@ -1,4 +1,4 @@
-exports.up = function(db) {
+exports.up = function (db) {
   return db.createTable('user', {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
     email: { type: 'string', notNull: true },
@@ -8,6 +8,6 @@ exports.up = function(db) {
   })
 }
 
-exports.down = function(db) {
+exports.down = function (db) {
   return db.dropTable('user')
 }

@@ -19,22 +19,16 @@ async function parseData() {
         return result
       }, [])
 
-    const tableRows = $('#per_game_stats > tbody')
-      .children()
-      .toArray()
+    const tableRows = $('#per_game_stats > tbody').children().toArray()
 
-    const playerData = tableRows.map(tr =>
+    const playerData = tableRows.map((tr) =>
       $(tr)
         .children()
         .toArray()
         .reduce((result, element) => {
           if ($(element).is('td')) {
             if (['player', 'team_id'].includes($(element).attr('data-stat'))) {
-              result.push(
-                $(element)
-                  .find('a')
-                  .html(),
-              )
+              result.push($(element).find('a').html())
             } else {
               result.push($(element).html())
             }
@@ -44,13 +38,15 @@ async function parseData() {
         }, []),
     )
 
-    const formattedPlayerData = playerData.map(player => ({
+    const formattedPlayerData = playerData.map((player) => ({
       [player[0]]: categories.map((category, index) => ({
         [category]: player[index],
       })),
     }))
 
-    // do something with formattedPlayerData
+    // console.log({ formattedPlayerData: JSON.stringify(formattedPlayerData) })
+
+    // write the data to database
   })
 }
 

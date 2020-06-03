@@ -1,11 +1,10 @@
 import React, { useContext } from 'react'
+import className from 'classnames'
 import { Link } from 'react-router-dom'
 import Cookies from 'js-cookie'
-import { Button } from 'antd'
-import classNames from 'classnames'
+import Button from '../components/button'
 
 import { store } from '../store'
-import Search from '../search'
 
 function Header() {
   const { state } = useContext(store)
@@ -13,26 +12,24 @@ function Header() {
 
   return (
     <div
-      className={classNames('header', {
-        'header__flex-end': !cookie
+      className={className('header', {
+        'flex-end': cookie,
       })}
     >
       {cookie ? (
-        <React.Fragment>
-          <Search />
-          {state.user ? `Hello, ${state.user.name}` : ''}
-        </React.Fragment>
+        <div className="flex-end">{state.user ? `Hello, ${state.user.name}` : ''}</div>
       ) : (
-        <div>
-          <Link to="/login">
-            <Button type="primary">Login</Button>
-          </Link>
-          <Link to="/signUp">
-            <Button type="primary" style={{ marginLeft: '15px' }}>
-              Sign Up
-            </Button>
-          </Link>
-        </div>
+        <React.Fragment>
+          <div>My Dashboard</div>
+          <div>
+            <Link to="/login">
+              <Button title="Login" />
+            </Link>
+            <Link to="/signUp">
+              <Button style={{ marginLeft: '15px' }} title="Sign Up" />
+            </Link>
+          </div>
+        </React.Fragment>
       )}
     </div>
   )

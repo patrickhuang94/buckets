@@ -3,10 +3,11 @@ import React, { useContext, useEffect } from 'react'
 import Sidebar from './home/sidebar'
 import Header from './home/header'
 
-import Home from './home'
+import Dashboard from './dashboard'
 import SignUp from './onboarding/signUp'
 import Login from './onboarding/login'
-import Players from './players'
+import Player from './player'
+import PlayerPage from './player/page'
 import Team from './team'
 
 import { store } from './store'
@@ -23,7 +24,7 @@ function App() {
     async function fetchUser() {
       const request = {
         method: 'GET',
-        url: '/user'
+        url: '/user',
       }
 
       const user = await normalizeAxios(request)
@@ -41,10 +42,11 @@ function App() {
           <Sidebar />
           <div className="app__container">
             <Header />
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" component={Dashboard} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signUp" component={SignUp} />
-            <Route exact path="/players" component={Players} />
+            <Route exact path="/player" component={Player} />
+            <Route exact path="/player/:id" component={PlayerPage} />
             <Route exact path="/team" component={Team} />
           </div>
         </div>

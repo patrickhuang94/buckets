@@ -9,7 +9,7 @@ function LoginForm() {
   const history = useHistory()
   const [fields, setFields] = useState({})
   const [error, setError] = useState(null)
-  const { dispatch } = useContext(store)
+  const { state, dispatch } = useContext(store)
 
   const submitForm = async () => {
     event.preventDefault()
@@ -18,13 +18,14 @@ function LoginForm() {
       url: '/auth/login',
       data: {
         email: fields.email,
-        password: fields.password
-      }
+        password: fields.password,
+      },
     }
 
     try {
       const user = await normalizeAxios(request)
       dispatch({ type: 'LOG_IN', payload: user })
+      console.log({ state })
       history.push('/')
     } catch (err) {
       const error = err.response && err.response.data
@@ -36,19 +37,14 @@ function LoginForm() {
     event.persist()
     setFields({
       ...fields,
-      [name]: event.target.value
+      [name]: event.target.value,
     })
   }
 
   const formInputItem = ({ label, placeholder, value, name, type }) => (
     <Item>
       <p className="form__input-label">{label}</p>
-      <Input
-        placeholder={placeholder}
-        value={value}
-        onChange={event => handleChange(event, name)}
-        type={type}
-      />
+      <Input placeholder={placeholder} value={value} onChange={(event) => handleChange(event, name)} type={type} />
     </Item>
   )
 
@@ -58,27 +54,20 @@ function LoginForm() {
         label: 'Email',
         name: 'email',
         placeholder: 'john@gmail.com',
-        value: fields.email
+        value: fields.email,
       })}
       {formInputItem({
         label: 'Password',
         name: 'password',
         value: fields.password,
-        type: 'password'
+        type: 'password',
       })}
       <Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          block
-          disabled={!fields.email || !fields.password}
-        >
+        <Button type="primary" htmlType="submit" block disabled={!fields.email || !fields.password}>
           Log In
         </Button>
       </Item>
-      <div style={{ marginBottom: '16px', height: '21px' }}>
-        {error && <p style={{ color: 'salmon' }}>{error}</p>}
-      </div>
+      <div style={{ marginBottom: '16px', height: '21px' }}>{error && <p style={{ color: 'salmon' }}>{error}</p>}</div>
     </Form>
   )
 }

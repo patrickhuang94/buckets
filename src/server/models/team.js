@@ -8,9 +8,9 @@ async function getTeamByName({ name }) {
 }
 
 async function getTeamByAbbreviation({ abbreviation }) {
-  const team = await query('SELECT id FROM "team" WHERE abbreviation = $1', [abbreviation])
+  const team = await query('SELECT id, name FROM "team" WHERE abbreviation = $1', [abbreviation])
   if (!team) throw new Error(`Cannot find team for ${abbreviation}`)
-  return team[0].name
+  return team[0]
 }
 
 async function getTeamById({ id }) {

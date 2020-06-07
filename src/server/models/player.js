@@ -28,12 +28,19 @@ async function create({ name, image, team_id }) {
   await query('INSERT INTO "player" (name, image, team_id) VALUES ($1, $2, $3)', [name, image, team_id])
 }
 
-async function update({ name, team_id }) {
-  await query('UPDATE "player" SET team_id = $1 WHERE name = $2', [team_id, name])
+async function update({ name, image }) {
+  await query('UPDATE "player" SET image = $1 WHERE name = $2', [image, name])
 }
 
-async function find({ name }) {
-  return query('SELECT * FROM "player" WHERE name = $1', [name])
+async function find({ name, id }) {
+  let player
+  if (name) {
+    player = await query('SELECT * FROM "player" WHERE name = $1', [name])
+    return player[0]
+  } else if (id) {
+    player = await query('SELECT * FROM "player" WHERE id = $1', [id])
+    return player[0]
+  }
 }
 
 async function findAll() {
@@ -42,7 +49,6 @@ async function findAll() {
     allPlayers.map(async (player) => ({
       id: player.id,
       name: player.name,
-      image: player.image,
       team: await Team.getTeamById({ id: player.team_id }),
     })),
   )

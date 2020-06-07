@@ -61,20 +61,19 @@ async function createPlayer({ name, image, team_id }) {
   })
 }
 
-async function updatePlayer({ name, team_id }) {
-  if (!name || !team_id) {
-    throw new Error('Missing player name or team.')
-  }
-
-  Player.update({ name, team_id })
-}
-
-async function findPlayer({ name }) {
+async function updatePlayer({ name, image }) {
   if (!name) {
     throw new Error('Missing player name.')
   }
 
-  return Player.find({ name })
+  Player.update({ name, image })
+}
+
+async function findPlayer({ name, id }) {
+  if (!name && !id) throw new Error('Missing player name or ID.')
+  if (name) return Player.find({ name })
+
+  return Player.find({ id })
 }
 
 async function findAllPlayers() {

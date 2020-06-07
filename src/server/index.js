@@ -9,6 +9,7 @@ const port = 3001
 const auth = require('./routes/auth')
 const player = require('./routes/player')
 const user = require('./routes/user')
+const conferenceStanding = require('./routes/conferenceStanding')
 
 app.listen(port, () => console.log(`Listening on port ${port}`))
 
@@ -18,5 +19,6 @@ app.use(cookieParser())
 app.use('/auth', auth)
 app.use('/player', player)
 app.use('/user', user)
+app.use('/conference_standing', conferenceStanding)
 
 module.exports = app

@@ -36,7 +36,12 @@ router.get('/', async function (req, res) {
 })
 
 router.get('/:id', async function (req, res) {
-  res.status(200).send(`ID requested: ${req.params}`)
+  try {
+    const player = await PlayerController.findPlayer({ id: req.params.id })
+    res.status(200).send(player)
+  } catch (err) {
+    res.status(500).send(err)
+  }
 })
 
 module.exports = router

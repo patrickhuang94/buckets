@@ -1,7 +1,35 @@
 .dashboard {
-  padding: 20px 0;
-  margin: 0 20px;
-  width: 96%;
-  height: 89%;
-  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+}
+
+.box__container {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.taller {
+  height: 70%;
+}
+
+.shorter {
+  height: 30%;
+}
+
+.box__two {
+  margin: 0 10px;
+  height: 100%;
+  padding: 10px;
+  background-color: salmon;
+  width: 100%;
+}
+
+.box__three {
+  margin: 0 10px;
+  height: 100%;
+  padding: 10px;
+  background-color: salmon;
+  width: 100%;
 }

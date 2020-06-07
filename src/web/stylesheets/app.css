@@ -8,6 +8,7 @@
 @import './team.scss';
 @import './sidebar.scss';
 @import './button.scss';
+@import './conferenceStanding.scss';
 
 body {
   margin: 0;

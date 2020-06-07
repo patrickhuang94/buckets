@@ -1,11 +1,7 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { store } from '../store'
-
 const Sidebar = () => {
-  const { state } = useContext(store)
-
   return (
     <div className="sidebar">
       <div className="sidebar__logo">
@@ -14,14 +10,18 @@ const Sidebar = () => {
         </Link>
       </div>
       <div className="sidebar__menu">
-        {state.loggedIn && (
-          <Link to="/team">
-            <p>My Team</p>
+        <div>
+          <h4>NBA</h4>
+          <Link to="/player">
+            <p>Player Lookup</p>
           </Link>
-        )}
-        <Link to="/players">
-          <p>Player Lookup</p>
-        </Link>
+          <Link to="/standing">
+            <p>Conference Standing</p>
+          </Link>
+        </div>
+        <div>
+          <h4>Fantasy NBA</h4>
+        </div>
       </div>
     </div>
   )

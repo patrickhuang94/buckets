@@ -9,12 +9,11 @@ const Players = () => {
 
   useEffect(() => {
     async function fetchPlayers() {
-      const request = {
+      const fetchedPlayers = await normalizeAxios({
         method: 'GET',
         url: '/player',
-      }
+      })
 
-      const fetchedPlayers = await normalizeAxios(request)
       setPlayers(fetchedPlayers)
     }
 

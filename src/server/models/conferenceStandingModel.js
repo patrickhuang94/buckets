@@ -1,5 +1,5 @@
 const query = require('../db')
-const Team = require('./team')
+const Team = require('./teamModel')
 
 async function create({ division, team_id, win, loss, seed, win_loss_percentage, games_back }) {
   await query(
@@ -17,8 +17,6 @@ async function findAll() {
       ORDER BY division DESC, cs.seed
     `,
   )
-
-  console.log({ allStandings })
 
   return allStandings
 }

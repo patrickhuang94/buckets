@@ -1,6 +1,7 @@
 const query = require('../db')
-const Team = require('../models/team')
+const Team = require('./teamModel')
 
+// TODO: Not used
 async function getProfile({ first_name, last_name }) {
   const player = await query('SELECT * FROM "player" WHERE first_name = $1', [first_name])
 
@@ -49,7 +50,7 @@ async function findAll() {
     allPlayers.map(async (player) => ({
       id: player.id,
       name: player.name,
-      team: await Team.getTeamById({ id: player.team_id }),
+      team: await Team.findById({ id: player.team_id }),
     })),
   )
 

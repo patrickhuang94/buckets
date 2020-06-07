@@ -1,4 +1,4 @@
-const User = require('../models/user')
+const User = require('../models/userModel')
 const { isEmpty } = require('lodash')
 const bcrypt = require('bcrypt')
 const { generateToken } = require('../jwt')

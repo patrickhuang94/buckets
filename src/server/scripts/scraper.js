@@ -40,16 +40,16 @@ async function downloadPerGameStats(browser) {
     const teamAbbreviation = await page.evaluate(
       () => document.querySelector('table#per_game > tbody > tr:last-child > td[data-stat="team_id"] > a').textContent,
     )
-    const team = await TeamController.getTeamByAbbreviation({ abbreviation: teamAbbreviation })
+    const team = await TeamController.findByAbbreviation({ abbreviation: teamAbbreviation })
     console.log(`Grabbing team for ${name}: ${team.name}`)
 
     // some players have played for different teams thorughout the season.
     // we just want the most recent team; overwrite previous entries with new team_id
-    const existingPlayer = await PlayerController.findPlayer({ name })
+    const existingPlayer = await PlayerController.find({ name })
     if (existingPlayer) {
-      await PlayerController.updatePlayer({ name, image })
+      await PlayerController.update({ name, image })
     } else {
-      await PlayerController.createPlayer({
+      await PlayerController.create({
         name,
         image,
         team_id: team.id,

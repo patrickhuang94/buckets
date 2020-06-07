@@ -1,4 +1,4 @@
-const Player = require('../models/player')
+const Player = require('../models/playerModel')
 
 async function runScript() {
   const allPlayers = await Player.findAll()

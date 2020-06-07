@@ -1,14 +1,14 @@
-const Team = require('../models/team')
+const Team = require('../models/teamModel')
 
-async function getTeamByName({ name }) {
+async function findByName({ name }) {
   return Team.getTeamByName({ name })
 }
 
-async function getTeamByAbbreviation({ abbreviation }) {
-  return Team.getTeamByAbbreviation({ abbreviation })
+async function findByAbbreviation({ abbreviation }) {
+  return Team.findByAbbreviation({ abbreviation })
 }
 
 module.exports = {
-  getTeamByName,
-  getTeamByAbbreviation,
+  findByName,
+  findByAbbreviation,
 }

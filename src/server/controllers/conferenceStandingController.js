@@ -1,5 +1,5 @@
-const ConferenceStanding = require('../models/conferenceStanding')
-const Team = require('../models/team')
+const ConferenceStanding = require('../models/conferenceStandingModel')
+const Team = require('../models/teamModel')
 
 async function create({ division, data }) {
   const team = await Team.getTeamByName({ name: data.teamName })

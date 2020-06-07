@@ -3,9 +3,9 @@ const router = express.Router()
 const jwt = require('jsonwebtoken')
 const JWT_SECRET_KEY = process.env.SECRET_KEY
 
-const User = require('../models/user')
+const User = require('../models/userModel')
 
-router.get('/', function(req, res) {
+router.get('/', function (req, res) {
   const token = req.cookies.token
   if (!token) return
   jwt.verify(token, JWT_SECRET_KEY, async (err, data) => {

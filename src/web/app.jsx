@@ -9,6 +9,7 @@ import Login from './onboarding/login'
 import Player from './player'
 import PlayerPage from './player/page'
 import Team from './team'
+import Standing from './standing'
 
 import { store } from './store'
 import normalizeAxios from './services/normalizeAxios'
@@ -48,6 +49,7 @@ function App() {
             <Route exact path="/player" component={Player} />
             <Route exact path="/player/:id" component={PlayerPage} />
             <Route exact path="/team" component={Team} />
+            <Route exact path="/standing" component={Standing} />
           </div>
         </div>
       </Router>

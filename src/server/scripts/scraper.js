@@ -2,12 +2,13 @@ const puppeteer = require('puppeteer')
 const PlayerController = require('../controllers/playerController')
 const TeamController = require('../controllers/teamController')
 const ConferenceStandingController = require('../controllers/conferenceStandingController')
+const StatsPerSeasonController = require('../controllers/statsPerSeasonController')
 
 async function main() {
   console.log('Starting to scrape...')
   const browser = await puppeteer.launch()
   await downloadPerGameStats(browser)
-  await downloadConferenceStandings(browser)
+  // await downloadConferenceStandings(browser)
   await browser.close()
   console.log('Done!')
 }
@@ -20,9 +21,18 @@ async function downloadPerGameStats(browser) {
     waitUntil: 'domcontentloaded',
   })
 
-  const selector = 'td[data-stat="player"] > a'
-  await page.waitForSelector(selector)
-  const playerUrls = await page.$$eval(selector, (row) => row.filter((e) => e.href).map((e) => e.href))
+  await page.waitForSelector('table#per_game_stats > tbody')
+
+  // player bio and previous season stats
+  let playerUrls = await page.evaluate(() => {
+    const rows = Array.from(document.querySelectorAll('table#per_game_stats > tbody > tr'))
+    return rows.reduce((acc, row) => {
+      if (!row.classList.contains('thead')) {
+        acc.push(row.querySelector('td[data-stat="player"] > a').href)
+      }
+      return acc
+    }, [])
+  })
 
   for (let i = 0; i < playerUrls.length; i++) {
     await page.goto(playerUrls[i], {
@@ -31,33 +41,131 @@ async function downloadPerGameStats(browser) {
 
     console.log(`Grabbing image for ${playerUrls[i]} `)
 
-    const name = await page.evaluate(() => document.querySelector('h1[itemprop="name"]').textContent)
-    const image = await page.evaluate(() => {
+    const player = await page.evaluate(() => {
       const url = document.querySelector('div.media-item > img')
-      return url ? url.src : ''
+      return {
+        name: document.querySelector('h1[itemprop="name"]').textContent,
+        weight: document.querySelector('span[itemprop="weight"]').textContent,
+        height: document.querySelector('span[itemprop="height"]').textContent,
+        image: url ? url.src : '',
+        teamAbbreviation: document.querySelector('table#per_game > tbody > tr:last-child > td[data-stat="team_id"] > a')
+          .textContent,
+        position: document.querySelector('table#per_game > tbody > tr:last-child > td[data-stat="pos"]').textContent,
+      }
     })
 
-    const teamAbbreviation = await page.evaluate(
-      () => document.querySelector('table#per_game > tbody > tr:last-child > td[data-stat="team_id"] > a').textContent,
-    )
-    const team = await TeamController.findByAbbreviation({ abbreviation: teamAbbreviation })
-    console.log(`Grabbing team for ${name}: ${team.name}`)
+    const seasonStats = await page.evaluate(() => {
+      const seasonStatsRows = Array.from(document.querySelectorAll('table#per_game > tbody > tr'))
+      const careerStatsRow = Array.from(document.querySelectorAll('table#per_game > tfoot > tr:first-child'))
+      return [...seasonStatsRows, ...careerStatsRow].reduce((acc, row) => {
+        if (
+          row.querySelector('td[data-stat="team_id"]') &&
+          row.querySelector('td[data-stat="team_id"]').textContent !== 'TOT' &&
+          !row.querySelector('td:last-child').textContent.includes('Did Not Play') // Embiid is a lil bitch and was injured the first two years
+        ) {
+          const data = {
+            season: row.id ? row.querySelector('th[data-stat="season"] > a').textContent : 'Career',
+            gamesPlayed: parseFloat(row.querySelector('td[data-stat="g"]').textContent),
+            gamesStarted: parseFloat(row.querySelector('td[data-stat="gs"]').textContent),
+            minutesPerGame: parseFloat(row.querySelector('td[data-stat="mp_per_g"]').textContent),
+            fieldGoals: parseFloat(row.querySelector('td[data-stat="fg_per_g"]').textContent),
+            fieldGoalAttempts: parseFloat(row.querySelector('td[data-stat="fga_per_g"]').textContent),
+            fieldGoalPercentage: parseFloat(row.querySelector('td[data-stat="fg_pct"]').textContent),
+            threePointFieldGoals: parseFloat(row.querySelector('td[data-stat="fg3_per_g"]').textContent),
+            threePointFieldGoalAttempts: parseFloat(row.querySelector('td[data-stat="fg3a_per_g"]').textContent),
+            threePointFieldGoalPercentage: parseFloat(row.querySelector('td[data-stat="fg3_pct"]').textContent),
+            twoPointFieldGoals: parseFloat(row.querySelector('td[data-stat="fg2_per_g"]').textContent),
+            twoPointFieldGoalAttempts: parseFloat(row.querySelector('td[data-stat="fg2a_per_g"]').textContent),
+            twoPointFieldGoalPercentage: parseFloat(row.querySelector('td[data-stat="fg2_pct"]').textContent),
+            effectiveFieldGoalPercentage: parseFloat(row.querySelector('td[data-stat="efg_pct"]').textContent),
+            freeThrows: parseFloat(row.querySelector('td[data-stat="ft_per_g"]').textContent),
+            freeThrowAttempts: parseFloat(row.querySelector('td[data-stat="fta_per_g"]').textContent),
+            freeThrowPercentage: parseFloat(row.querySelector('td[data-stat="ft_pct"]').textContent),
+            offensiveRebounds: parseFloat(row.querySelector('td[data-stat="orb_per_g"]').textContent),
+            defensiveRebounds: parseFloat(row.querySelector('td[data-stat="drb_per_g"]').textContent),
+            totalRebounds: parseFloat(row.querySelector('td[data-stat="trb_per_g"]').textContent),
+            assists: parseFloat(row.querySelector('td[data-stat="ast_per_g"]').textContent),
+            steals: parseFloat(row.querySelector('td[data-stat="stl_per_g"]').textContent),
+            blocks: parseFloat(row.querySelector('td[data-stat="blk_per_g"]').textContent),
+            turnovers: parseFloat(row.querySelector('td[data-stat="tov_per_g"]').textContent),
+            personalFouls: parseFloat(row.querySelector('td[data-stat="pf_per_g"]').textContent),
+            points: parseFloat(row.querySelector('td[data-stat="pts_per_g"]').textContent),
+          }
 
-    // some players have played for different teams thorughout the season.
+          if (row.id) {
+            // skip "Career" row, which doesn't have a team and position column value
+            data.team = row.querySelector('td[data-stat="team_id"] > a').textContent
+            data.position = row.querySelector('td[data-stat="pos"]').textContent
+          }
+
+          acc.push(data)
+        }
+        return acc
+      }, [])
+    })
+
+    console.log(`Season stats for ${player.name}`, seasonStats)
+
+    for (const stat of seasonStats) {
+      await StatsPerSeasonController.create({
+        player_name: player.name,
+        season: stat.season,
+        games_played: stat.gamesPlayed,
+        games_started: stat.gamesStarted,
+        minutes_played: stat.minutesPerGame,
+        field_goals: stat.fieldGoals,
+        field_goal_attempts: stat.fieldGoalAttempts,
+        field_goal_percentage: stat.fieldGoalPercentage,
+        three_point_field_goals: stat.threePointFieldGoals,
+        three_point_field_goal_attempts: stat.threePointFieldGoalAttempts,
+        three_point_field_goal_percentage: stat.threePointFieldGoalPercentage,
+        two_point_field_goals: stat.twoPointFieldGoals,
+        two_point_field_goal_attempts: stat.twoPointFieldGoalAttempts,
+        two_point_field_goal_percentage: stat.twoPointFieldGoalPercentage,
+        effective_field_goal_percentage: stat.effectiveFieldGoalPercentage,
+        free_throws: stat.freeThrows,
+        free_throw_attempts: stat.freeThrowAttempts,
+        free_throw_percentage: stat.freeThrowPercentage,
+        offensive_rebounds: stat.offensiveRebounds,
+        defensive_rebounds: stat.defensiveRebounds,
+        total_rebounds: stat.totalRebounds,
+        assists: stat.assists,
+        steals: stat.steals,
+        blocks: stat.blocks,
+        turnovers: stat.turnovers,
+        personal_fouls: stat.personalFouls,
+        points: stat.points,
+      })
+    }
+
+    const team = await TeamController.findByAbbreviation({ abbreviation: player.teamAbbreviation })
+    console.log(`Grabbing full name team for ${player.name}: ${team.name}`)
+
+    // some players have played for different teams throughout the season.
     // we just want the most recent team; overwrite previous entries with new team_id
-    const existingPlayer = await PlayerController.find({ name })
+    const existingPlayer = await PlayerController.find({ name: player.name })
     if (existingPlayer) {
-      await PlayerController.update({ name, image })
+      await PlayerController.update({
+        name: player.name,
+        image: player.image,
+        weight: player.weight,
+        height: player.height,
+        position: player.position,
+      })
     } else {
       await PlayerController.create({
-        name,
-        image,
+        name: player.name,
+        image: player.image,
+        weight: player.weight,
+        height: player.height,
         team_id: team.id,
       })
     }
 
     console.log('Player analysis done.')
   }
+
+  await page.close()
 }
 
 async function downloadConferenceStandings(browser) {
@@ -78,8 +186,8 @@ async function downloadConferenceStandings(browser) {
       const seed = element.querySelector('th[data-stat="team_name"] > span').textContent.replace(/[()]/g, '').trim()
       const wins = element.querySelector('td[data-stat="wins"]').textContent
       const losses = element.querySelector('td[data-stat="losses"]').textContent
-      const winLossPercentage = element.querySelector('td[data-stat="win_loss_pct"').textContent
-      const gamesBack = element.querySelector('td[data-stat="gb"').textContent
+      const winLossPercentage = element.querySelector('td[data-stat="win_loss_pct"]').textContent
+      const gamesBack = element.querySelector('td[data-stat="gb"]').textContent
 
       return {
         teamName,

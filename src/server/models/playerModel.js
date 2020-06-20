@@ -25,12 +25,25 @@ async function getProfile({ first_name, last_name }) {
   return playerProfile
 }
 
-async function create({ name, image, team_id }) {
-  await query('INSERT INTO "player" (name, image, team_id) VALUES ($1, $2, $3)', [name, image, team_id])
+async function create({ name, image, weight, height, team_id, position }) {
+  await query('INSERT INTO "player" (name, image, weight, height, team_id, position) VALUES ($1, $2, $3, $4, $5, $6)', [
+    name,
+    image,
+    weight,
+    height,
+    team_id,
+    position,
+  ])
 }
 
-async function update({ name, image }) {
-  await query('UPDATE "player" SET image = $1 WHERE name = $2', [image, name])
+async function update({ name, image, weight, height, position }) {
+  await query('UPDATE "player" SET image = $1, weight = $2, height = $3, position = $4 WHERE name = $5', [
+    image,
+    weight,
+    height,
+    position,
+    name,
+  ])
 }
 
 async function find({ name, id }) {

@@ -77,12 +77,12 @@ async function create({
   )
 }
 
-async function find({ id }) {
+async function findAll({ id }) {
   const stats = await query('SELECT * FROM "stats_per_season" WHERE player_id = $1', [id])
-  return stats[0]
+  return stats
 }
 
 module.exports = {
   create,
-  find,
+  findAll,
 }

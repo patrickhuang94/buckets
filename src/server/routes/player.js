@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const PlayerController = require('../controllers/playerController')
+const StatsPerSeasonController = require('../controllers/statsPerSeasonController')
 
 router.get('/', async function (req, res) {
   try {

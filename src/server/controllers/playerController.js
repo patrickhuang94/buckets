@@ -30,9 +30,10 @@ async function find({ name, id }) {
   if (name) return PlayerModel.find({ name })
 
   const player = await PlayerModel.find({ id })
-  const stats = await StatsPerSeasonModel.find({ id })
+  const stats = await StatsPerSeasonModel.findAll({ id })
   const team = await TeamModel.findById({ id: player.team_id })
-  return { ...player, ...stats, team }
+
+  return { ...player, stats, team }
 }
 
 async function findAll() {

@@ -1,9 +1,11 @@
 const StatsPerSeasonModel = require('../models/statsPerSeasonModel')
 const PlayerModel = require('../models/playerModel')
+const TeamModel = require('../models/teamModel')
 
 async function create({
   player_name,
   season,
+  team_name,
   games_played,
   games_started,
   minutes_played,
@@ -31,9 +33,11 @@ async function create({
   points,
 }) {
   const player = await PlayerModel.find({ name: player_name })
+  const team = await TeamModel.findByAbbreviation({ abbreviation: team_name })
   await StatsPerSeasonModel.create({
     player_id: player.id,
     season,
+    team_id: team ? team.id : null,
     games_played,
     games_started,
     minutes_played,

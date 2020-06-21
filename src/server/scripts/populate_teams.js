@@ -16,6 +16,7 @@ function populateTeams() {
       name: 'Brooklyn Nets',
       abbreviation: 'BRK',
       alternate_name: 'New Jersey Nets',
+      alternate_abbreviation: 'NJN',
       logo: 'https://d2p3bygnnzw9w3.cloudfront.net/req/202005291/tlogo/bbr/BRK-2020.png',
     },
     {
@@ -80,6 +81,7 @@ function populateTeams() {
       name: 'Memphis Grizzlies',
       abbreviation: 'MEM',
       alternate_name: 'Vancouver Grizzlies',
+      alternate_abbreviation: 'VAN',
       logo: 'https://d2p3bygnnzw9w3.cloudfront.net/req/202005291/tlogo/bbr/MEM-2020.png',
     },
     {
@@ -101,6 +103,7 @@ function populateTeams() {
       name: 'New Orleans Pelicans',
       abbreviation: 'NOP',
       alternate_name: 'New Orleans Hornets',
+      alternate_abbreviation: 'NOH',
       logo: 'https://d2p3bygnnzw9w3.cloudfront.net/req/202005291/tlogo/bbr/NOP-2020.png',
     },
     {
@@ -112,6 +115,7 @@ function populateTeams() {
       name: 'Oklahoma City Thunder',
       abbreviation: 'OKC',
       alternate_name: 'Seattle Supersonics',
+      alternate_abbreviation: 'SEA',
       logo: 'https://d2p3bygnnzw9w3.cloudfront.net/req/202005291/tlogo/bbr/OKC-2020.png',
     },
     {

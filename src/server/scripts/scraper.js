@@ -23,12 +23,12 @@ async function downloadPerGameStats(browser) {
 
   await page.waitForSelector('table#per_game_stats > tbody')
 
-  // player bio and previous season stats
-  let playerUrls = await page.evaluate(() => {
+  const playerUrls = await page.evaluate(() => {
     const rows = Array.from(document.querySelectorAll('table#per_game_stats > tbody > tr'))
     return rows.reduce((acc, row) => {
-      if (!row.classList.contains('thead')) {
-        acc.push(row.querySelector('td[data-stat="player"] > a').href)
+      const player = row.querySelector('td[data-stat="player"] > a')
+      if (!row.classList.contains('thead') && !acc.includes(player.href)) {
+        acc.push(player.href)
       }
       return acc
     }, [])
@@ -109,6 +109,7 @@ async function downloadPerGameStats(browser) {
     for (const stat of seasonStats) {
       await StatsPerSeasonController.create({
         player_name: player.name,
+        team_name: stat.team,
         season: stat.season,
         games_played: stat.gamesPlayed,
         games_started: stat.gamesStarted,

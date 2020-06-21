@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { Input } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
+import { Table, Input } from 'antd'
 import normalizeAxios from '../services/normalizeAxios'
-import { store } from '../store'
-import PlayerTable from './table'
 
 const Players = () => {
   const [players, setPlayers] = useState(null)
@@ -22,36 +21,69 @@ const Players = () => {
 
   if (!players) return <div>Loading...</div>
   return (
-    <div>
-      <Search />
-      <PlayerTable players={players} />
+    <div className="horizontal__padding">
+      <PlayersTable players={players} />
     </div>
   )
 }
 
-const Search = () => {
-  const [name, setName] = useState('')
-  const { dispatch, state } = useContext(store)
+const PlayersTable = ({ players }) => {
+  const [playerData, setPlayerData] = useState(players)
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const handleChangeName = (e) => setName(e.target.value)
+  useEffect(() => {
+    function searchPlayers() {
+      setSearchQuery(searchQuery)
 
-  const onSubmit = async (e) => {
-    e.preventDefault()
-    const playerRequest = {
-      method: 'GET',
-      url: `/player/stats?name=${name}`,
+      const filteredPlayerData = players.filter((player) => {
+        // https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
+        const normalizedPlayerName = player.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        return normalizedPlayerName.toUpperCase().includes(searchQuery.toUpperCase())
+      })
+      setPlayerData(filteredPlayerData)
     }
-    const player = await normalizeAxios(playerRequest)
-    dispatch({ type: 'FIND_PLAYER', payload: player })
-  }
+
+    searchPlayers()
+  }, [searchQuery])
+
+  const columns = [
+    {
+      key: 'name',
+      dataIndex: 'name',
+      title: 'Name',
+    },
+    {
+      key: 'position',
+      dataIndex: 'position',
+      title: 'Position',
+    },
+    {
+      key: 'team',
+      dataIndex: 'team',
+      title: 'Team',
+    },
+  ]
+
+  const dataSource = playerData.map((player, index) => ({
+    key: index,
+    id: player.id,
+    name: player.name,
+    position: player.position,
+    team: player.team_name,
+  }))
+
+  const history = useHistory()
+
+  const handleOnRow = (player) => ({
+    onClick: () => history.push(`/player/${player.id}`),
+  })
 
   return (
-    <div className="search__container">
-      <form onSubmit={onSubmit} className="search__form">
-        <Input value={name} placeholder="Player name" onChange={handleChangeName} />
-        <input type="submit" value="Find player stats" />
-      </form>
-      {Object.keys(state.currentPlayer).length ? <Players /> : null}
+    <div>
+      <div style={{ width: '400px', marginBottom: '20px' }}>
+        <Input placeholder="Search" onChange={(event) => setSearchQuery(event.target.value)} />
+      </div>
+      <Table columns={columns} dataSource={dataSource} size="middle" onRow={handleOnRow} rowClassName="players__row" />
     </div>
   )
 }

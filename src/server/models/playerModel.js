@@ -58,16 +58,16 @@ async function find({ name, id }) {
 }
 
 async function findAll() {
-  const allPlayers = await query('SELECT id, name, image, team_id FROM "player"')
-  const formattedPlayers = await Promise.all(
-    allPlayers.map(async (player) => ({
-      id: player.id,
-      name: player.name,
-      team: await Team.findById({ id: player.team_id }),
-    })),
+  const allPlayers = await query(
+    `
+      SELECT p.id, p.name as name, p.image, p.position, t.name as team_name
+      FROM player p
+      JOIN team t
+      ON p.team_id = t.id
+    `,
   )
 
-  return formattedPlayers
+  return allPlayers
 }
 
 module.exports = {

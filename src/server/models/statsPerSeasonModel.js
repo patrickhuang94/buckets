@@ -83,7 +83,7 @@ async function findAll({ id }) {
   // const stats = await query('SELECT * FROM "stats_per_season" WHERE player_id = $1', [id])
   const stats = await query(
     `
-      SELECT s.*, t.name as team_name
+      SELECT s.*, t.name as team_name, t.abbreviation as team_abbreviation
       FROM stats_per_season s 
       FULL OUTER JOIN team t
       ON s.team_id = t.id

@@ -16,9 +16,9 @@ async function findByAbbreviation({ abbreviation }) {
 }
 
 async function findById({ id }) {
-  const team = await query('SELECT name FROM "team" WHERE id = $1', [id])
+  const team = await query('SELECT abbreviation, name FROM "team" WHERE id = $1', [id])
   if (!team) throw new Error(`Cannot find team for ${id}`)
-  return team[0].name
+  return team[0]
 }
 
 module.exports = {

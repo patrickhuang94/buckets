@@ -42,8 +42,8 @@ const PlayerInfo = ({ playerData, side }) => {
   return (
     <React.Fragment>
       <div className="flex-column">
-        <h3>{playerData.name}</h3>
-        <p>{`Position: ${playerData.position}`}</p>
+        <h3 className="text__end-align">{playerData.name}</h3>
+        <p className="text__end-align">{`Position: ${playerData.position}`}</p>
       </div>
       <img src={playerData.image} className="player-image" />
     </React.Fragment>

@@ -3,7 +3,6 @@ import { Card } from 'antd'
 import normalizeAxios from '../services/normalizeAxios'
 import SelectMenu from './selectMenu'
 import PlayerAvatar from './playerAvatar'
-import { EditOutlined } from '@ant-design/icons'
 
 const PlayerComparison = () => {
   const [players, setPlayers] = useState(null)
@@ -38,6 +37,7 @@ const PlayerComparison = () => {
         <Card
           title="Player 1"
           className="card"
+          headStyle={{ textAlign: 'end' }}
           actions={[
             <SelectMenu
               players={players}
@@ -82,16 +82,18 @@ const PlayerComparison = () => {
 }
 
 const ComparisonChart = ({ playerOneData, playerTwoData }) => {
-  const playerOneStats =
-    playerOneData && playerOneData.stats[playerOneData.stats.length - 2]
-  const playerTwoStats =
-    playerTwoData && playerTwoData.stats[playerTwoData.stats.length - 2]
+  const playerOneCurrentSeasonStats =
+    playerOneData &&
+    playerOneData.stats.find((stat) => stat.season === '2019-20')
+  const playerTwoCurrentSeasonStats =
+    playerTwoData &&
+    playerTwoData.stats.find((stat) => stat.season === '2019-20')
 
   return (
     <div style={{ marginBottom: '15px' }}>
       <div className="flex__full-width">
         <div className="player-one__data-container">
-          {playerOneData && <Stats playerStats={playerOneStats} />}
+          {playerOneData && <Stats playerStats={playerOneCurrentSeasonStats} />}
         </div>
         <div className="comparison-chart__stats-title">
           <h3>MPG</h3>
@@ -106,7 +108,7 @@ const ComparisonChart = ({ playerOneData, playerTwoData }) => {
           <h3>FT%</h3>
         </div>
         <div className="player-two__data-container">
-          {playerTwoData && <Stats playerStats={playerTwoStats} />}
+          {playerTwoData && <Stats playerStats={playerTwoCurrentSeasonStats} />}
         </div>
       </div>
     </div>
@@ -114,6 +116,23 @@ const ComparisonChart = ({ playerOneData, playerTwoData }) => {
 }
 
 const Stats = ({ playerStats }) => {
+  if (!playerStats) {
+    return (
+      <div className="flex-column__center">
+        <h3>-</h3>
+        <h3>-</h3>
+        <h3>-</h3>
+        <h3>-</h3>
+        <h3>-</h3>
+        <h3>-</h3>
+        <h3>-</h3>
+        <h3>-</h3>
+        <h3>-</h3>
+        <h3>-</h3>
+      </div>
+    )
+  }
+
   return (
     <div className="flex-column__center">
       <h3>{playerStats.minutes_played}</h3>

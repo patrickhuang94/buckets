@@ -1,4 +1,6 @@
 .sidebar {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
   min-width: 180px;
 }
@@ -18,4 +20,8 @@
 
 .sidebar__menu {
   margin-left: 12px;
+}
+
+.sidebar__menu-item {
+  margin-bottom: 10px;
 }

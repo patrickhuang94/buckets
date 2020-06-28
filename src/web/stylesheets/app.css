@@ -9,15 +9,19 @@
 @import './sidebar.scss';
 @import './button.scss';
 @import './conferenceStanding.scss';
+@import './comparison.scss';
 
 body {
   margin: 0;
   padding: 0;
 }
 
+p {
+  margin: 0;
+}
+
 .app {
   display: flex;
-  height: 100vh;
 }
 
 .app__full-container {
@@ -33,4 +37,41 @@ body {
 
 .container {
   width: 100%;
+}
+
+.page__container {
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
+.flex__full-width {
+  display: flex;
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-column__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flex-column__end {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.flex-column__start {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }

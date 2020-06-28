@@ -11,16 +11,15 @@ const Sidebar = () => {
       </div>
       <div className="sidebar__menu">
         <div>
-          <h4>NBA</h4>
           <Link to="/player">
-            <p>Player Lookup</p>
+            <p className="sidebar__menu-item">Player Lookup</p>
           </Link>
           <Link to="/standing">
-            <p>Conference Standing</p>
+            <p className="sidebar__menu-item">Conference Standing</p>
           </Link>
-        </div>
-        <div>
-          <h4>Fantasy NBA</h4>
+          <Link to="/comparison">
+            <p className="sidebar__menu-item">Player Comparison</p>
+          </Link>
         </div>
       </div>
     </div>

@@ -8,7 +8,6 @@ import SignUp from './onboarding/signUp'
 import Login from './onboarding/login'
 import Player from './player'
 import PlayerPage from './player/page'
-import Team from './team'
 import Standing from './standing'
 import PlayerComparison from './comparison'
 
@@ -49,7 +48,6 @@ function App() {
             <Route exact path="/signUp" component={SignUp} />
             <Route exact path="/player" component={Player} />
             <Route exact path="/player/:id" component={PlayerPage} />
-            <Route exact path="/team" component={Team} />
             <Route exact path="/standing" component={Standing} />
             <Route exact path="/comparison" component={PlayerComparison} />
           </div>

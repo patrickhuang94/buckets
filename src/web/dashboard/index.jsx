@@ -1,11 +1,6 @@
-import React, { useContext } from 'react'
-import ConferenceStanding from '../standing'
-
-import Team from '../team'
-import { store } from '../store'
+import React from 'react'
 
 const Dashboard = () => {
-  const { state } = useContext(store)
   return (
     <div className="dashboard">
       <div className="box__container taller">

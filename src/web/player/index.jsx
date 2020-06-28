@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Table, Input } from 'antd'
+import { Table, Input, Spin } from 'antd'
 import normalizeAxios from '../services/normalizeAxios'
 
 const Players = () => {
@@ -19,10 +19,9 @@ const Players = () => {
     fetchPlayers()
   }, [])
 
-  if (!players) return <div>Loading...</div>
   return (
-    <div className="horizontal__padding">
-      <PlayersTable players={players} />
+    <div className="page__container">
+      {!players ? <Spin /> : <PlayersTable players={players} />}
     </div>
   )
 }
@@ -37,8 +36,12 @@ const PlayersTable = ({ players }) => {
 
       const filteredPlayerData = players.filter((player) => {
         // https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
-        const normalizedPlayerName = player.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-        return normalizedPlayerName.toUpperCase().includes(searchQuery.toUpperCase())
+        const normalizedPlayerName = player.name
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+        return normalizedPlayerName
+          .toUpperCase()
+          .includes(searchQuery.toUpperCase())
       })
       setPlayerData(filteredPlayerData)
     }
@@ -51,11 +54,13 @@ const PlayersTable = ({ players }) => {
       key: 'name',
       dataIndex: 'name',
       title: 'Name',
+      width: 270,
     },
     {
       key: 'position',
       dataIndex: 'position',
       title: 'Position',
+      width: 120,
     },
     {
       key: 'team',
@@ -79,12 +84,21 @@ const PlayersTable = ({ players }) => {
   })
 
   return (
-    <div>
-      <div style={{ width: '400px', marginBottom: '20px' }}>
-        <Input placeholder="Search" onChange={(event) => setSearchQuery(event.target.value)} />
+    <React.Fragment>
+      <div className="search__container">
+        <Input
+          placeholder="Search"
+          onChange={(event) => setSearchQuery(event.target.value)}
+        />
       </div>
-      <Table columns={columns} dataSource={dataSource} size="middle" onRow={handleOnRow} rowClassName="players__row" />
-    </div>
+      <Table
+        columns={columns}
+        dataSource={dataSource}
+        size="middle"
+        onRow={handleOnRow}
+        rowClassName="players__row"
+      />
+    </React.Fragment>
   )
 }
 

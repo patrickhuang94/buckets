@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Card } from 'antd'
+import { Table, Card, Spin } from 'antd'
 import normalizeAxios from '../services/normalizeAxios'
 
 const PlayerPage = () => {
@@ -20,10 +20,17 @@ const PlayerPage = () => {
     fetchPlayerProfile()
   }, [])
 
-  if (!player) return <div className="horizontal__padding">Loading...</div>
+  if (!player) {
+    return (
+      <div className="page__container">
+        <Spin />
+      </div>
+    )
+  }
+
   return (
     <div>
-      <div className="cards__container horizontal__padding">
+      <div className="cards__container page__container">
         <div className="cards__wrapper">
           <Card title="Player" className="card__margin-right">
             <div className="flex">
@@ -36,8 +43,8 @@ const PlayerPage = () => {
               </div>
             </div>
           </Card>
-          <Card title="Player Bio" className="card__margin-left">
-            <h3>Hahahahaha</h3>
+          <Card title="Upcoming Games" className="card__margin-left">
+            <h3>Upcoming Games</h3>
           </Card>
         </div>
         <Card title="Stats" className="player-stats__container">
@@ -54,7 +61,6 @@ const PlayerStats = ({ player }) => {
       key: 'season',
       dataIndex: 'season',
       title: 'SEASON',
-      width: 100,
     },
     {
       key: 'team',
@@ -118,12 +124,12 @@ const PlayerStats = ({ player }) => {
     },
   ]
 
-  if (!player) return <div>Loading...</div>
+  if (!player) return <Spin />
 
   const dataSource = player.stats.reverse().map((data) => ({
     id: data.id,
     season: data.season,
-    team: data.team_abbreviation,
+    team: data.team_abbreviation || '-',
     minutes_played: data.minutes_played,
     points: data.points,
     two_point_field_goal_percentage: data.two_point_field_goal_percentage,
@@ -137,7 +143,14 @@ const PlayerStats = ({ player }) => {
     turnovers: data.turnovers,
   }))
 
-  return <Table columns={columns} dataSource={dataSource} size="middle" scroll={{ y: 135 }} />
+  return (
+    <Table
+      columns={columns}
+      dataSource={dataSource}
+      size="middle"
+      pagination={{ hideOnSinglePage: true }}
+    />
+  )
 }
 
 export default PlayerPage

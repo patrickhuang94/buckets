@@ -27,11 +27,13 @@ async function update({ name, image, weight, height, position }) {
 
 async function find({ name, id }) {
   if (!name && !id) throw new Error('Missing player name or ID.')
-  if (name) return PlayerModel.find({ name })
 
-  const player = await PlayerModel.find({ id })
-  const stats = await StatsPerSeasonModel.findAll({ id })
+  const player = name
+    ? await PlayerModel.find({ name })
+    : await PlayerModel.find({ id })
+  const stats = await StatsPerSeasonModel.findAll({ id: player.id })
   const team = await TeamModel.findById({ id: player.team_id })
+
   return { ...player, stats, team: team.name }
 }
 

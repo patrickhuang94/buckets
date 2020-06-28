@@ -3,14 +3,18 @@ const Team = require('./teamModel')
 
 // TODO: Not used
 async function getProfile({ first_name, last_name }) {
-  const player = await query('SELECT * FROM "player" WHERE first_name = $1', [first_name])
+  const player = await query('SELECT * FROM "player" WHERE first_name = $1', [
+    first_name,
+  ])
 
   if (!player) {
     throw new Error('No player found with that name.')
   }
 
   const foundPlayer = player[0]
-  const team = await query('SELECT * FROM "team" WHERE id = $1', [foundPlayer.team_id])
+  const team = await query('SELECT * FROM "team" WHERE id = $1', [
+    foundPlayer.team_id,
+  ])
   const foundTeam = team[0]
 
   const playerProfile = {
@@ -26,24 +30,17 @@ async function getProfile({ first_name, last_name }) {
 }
 
 async function create({ name, image, weight, height, team_id, position }) {
-  await query('INSERT INTO "player" (name, image, weight, height, team_id, position) VALUES ($1, $2, $3, $4, $5, $6)', [
-    name,
-    image,
-    weight,
-    height,
-    team_id,
-    position,
-  ])
+  await query(
+    'INSERT INTO "player" (name, image, weight, height, team_id, position) VALUES ($1, $2, $3, $4, $5, $6)',
+    [name, image, weight, height, team_id, position],
+  )
 }
 
 async function update({ name, image, weight, height, position }) {
-  await query('UPDATE "player" SET image = $1, weight = $2, height = $3, position = $4 WHERE name = $5', [
-    image,
-    weight,
-    height,
-    position,
-    name,
-  ])
+  await query(
+    'UPDATE "player" SET image = $1, weight = $2, height = $3, position = $4 WHERE name = $5',
+    [image, weight, height, position, name],
+  )
 }
 
 async function find({ name, id }) {

@@ -4,8 +4,8 @@ const TeamController = require('../controllers/teamController')
 const ConferenceStandingController = require('../controllers/conferenceStandingController')
 const StatsPerSeasonController = require('../controllers/statsPerSeasonController')
 
-const PlayerModel = require('../models/playerModel')
-const StatsPerSeasonModel = require('../models/statsPerSeasonModel')
+// const PlayerModel = require('../models/playerModel')
+// const StatsPerSeasonModel = require('../models/statsPerSeasonModel')
 
 async function main() {
   console.log('Starting to scrape...')
@@ -175,46 +175,54 @@ async function downloadPerGameStats(browser) {
 
     console.log(`Season stats for ${player.name}`, seasonStats)
 
-    // backfilling some missing entries; skip creation if player_id already exists
-    const dbPlayer = await PlayerModel.find({ name: player.name })
-    const existingDbPlayer = await StatsPerSeasonModel.findAll({
-      id: dbPlayer.id,
-    })
-    if (existingDbPlayer.length) {
-      console.log('Skip')
-    } else {
-      for (const stat of seasonStats) {
-        await StatsPerSeasonController.create({
-          player_name: player.name,
-          team_name: stat.team,
-          season: stat.season,
-          games_played: stat.gamesPlayed,
-          games_started: stat.gamesStarted,
-          minutes_played: stat.minutesPerGame,
-          field_goals: stat.fieldGoals,
-          field_goal_attempts: stat.fieldGoalAttempts,
-          field_goal_percentage: stat.fieldGoalPercentage,
-          three_point_field_goals: stat.threePointFieldGoals,
-          three_point_field_goal_attempts: stat.threePointFieldGoalAttempts,
-          three_point_field_goal_percentage: stat.threePointFieldGoalPercentage,
-          two_point_field_goals: stat.twoPointFieldGoals,
-          two_point_field_goal_attempts: stat.twoPointFieldGoalAttempts,
-          two_point_field_goal_percentage: stat.twoPointFieldGoalPercentage,
-          effective_field_goal_percentage: stat.effectiveFieldGoalPercentage,
-          free_throws: stat.freeThrows,
-          free_throw_attempts: stat.freeThrowAttempts,
-          free_throw_percentage: stat.freeThrowPercentage,
-          offensive_rebounds: stat.offensiveRebounds,
-          defensive_rebounds: stat.defensiveRebounds,
-          total_rebounds: stat.totalRebounds,
-          assists: stat.assists,
-          steals: stat.steals,
-          blocks: stat.blocks,
-          turnovers: stat.turnovers,
-          personal_fouls: stat.personalFouls,
-          points: stat.points,
-        })
-      }
+    // backfilling some missing entries
+    // const dbPlayer = await PlayerModel.find({ name: player.name })
+    // const existingDbPlayerStats = await StatsPerSeasonModel.findAll({
+    //   id: dbPlayer.id,
+    // })
+
+    // const missingSeasonStats = seasonStats.filter(
+    //   ({ season: season1 }) =>
+    //     !existingDbPlayerStats.some(
+    //       ({ season: season2 }) => season1 === season2,
+    //     ),
+    // )
+
+    // const stats = missingSeasonStats.length ? missingSeasonStats : seasonStats
+    // if (missingSeasonStats.length) {
+    // for (const stat of missingSeasonStats) {
+
+    for (const stat of seasonStats) {
+      await StatsPerSeasonController.create({
+        player_name: player.name,
+        team_name: stat.team,
+        season: stat.season,
+        games_played: stat.gamesPlayed,
+        games_started: stat.gamesStarted,
+        minutes_played: stat.minutesPerGame,
+        field_goals: stat.fieldGoals,
+        field_goal_attempts: stat.fieldGoalAttempts,
+        field_goal_percentage: stat.fieldGoalPercentage,
+        three_point_field_goals: stat.threePointFieldGoals,
+        three_point_field_goal_attempts: stat.threePointFieldGoalAttempts,
+        three_point_field_goal_percentage: stat.threePointFieldGoalPercentage,
+        two_point_field_goals: stat.twoPointFieldGoals,
+        two_point_field_goal_attempts: stat.twoPointFieldGoalAttempts,
+        two_point_field_goal_percentage: stat.twoPointFieldGoalPercentage,
+        effective_field_goal_percentage: stat.effectiveFieldGoalPercentage,
+        free_throws: stat.freeThrows,
+        free_throw_attempts: stat.freeThrowAttempts,
+        free_throw_percentage: stat.freeThrowPercentage,
+        offensive_rebounds: stat.offensiveRebounds,
+        defensive_rebounds: stat.defensiveRebounds,
+        total_rebounds: stat.totalRebounds,
+        assists: stat.assists,
+        steals: stat.steals,
+        blocks: stat.blocks,
+        turnovers: stat.turnovers,
+        personal_fouls: stat.personalFouls,
+        points: stat.points,
+      })
     }
 
     const team = await TeamController.findByAbbreviation({

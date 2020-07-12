@@ -154,25 +154,12 @@ async function findAllLeaders() {
     `,
   )
 
-  const fieldGoalPercentageLeaders = await query(
-    `
-      SELECT p.id, p.name, p.image, s.field_goal_percentage, s.season
-      FROM stats_per_season s
-      JOIN player p
-      ON p.id = s.player_id
-      WHERE s.season = '2019-20'
-      ORDER BY s.field_goal_percentage DESC
-      LIMIT 5
-    `,
-  )
-
   return {
     pointsLeaders,
     reboundsLeaders,
     assistsLeaders,
     blocksLeaders,
     stealsLeaders,
-    fieldGoalPercentageLeaders,
   }
 }
 

@@ -34,6 +34,7 @@ async function create({
 }) {
   const player = await PlayerModel.find({ name: player_name })
   const team = await TeamModel.findByAbbreviation({ abbreviation: team_name })
+
   await StatsPerSeasonModel.create({
     player_id: player.id,
     season,

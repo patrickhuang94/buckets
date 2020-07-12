@@ -80,7 +80,6 @@ async function create({
 }
 
 async function findAll({ id }) {
-  // const stats = await query('SELECT * FROM "stats_per_season" WHERE player_id = $1', [id])
   const stats = await query(
     `
       SELECT s.*, t.name as team_name, t.abbreviation as team_abbreviation
@@ -94,7 +93,91 @@ async function findAll({ id }) {
   return stats
 }
 
+async function findAllLeaders() {
+  const pointsLeaders = await query(
+    `
+      SELECT p.id, p.name, p.image, s.points, s.season
+      FROM stats_per_season s
+      JOIN player p
+      ON p.id = s.player_id
+      WHERE s.season = '2019-20'
+      ORDER BY s.points DESC
+      LIMIT 5
+    `,
+  )
+
+  const reboundsLeaders = await query(
+    `
+      SELECT p.id, p.name, p.image, s.total_rebounds, s.season
+      FROM stats_per_season s
+      JOIN player p
+      ON p.id = s.player_id
+      WHERE s.season = '2019-20'
+      ORDER BY s.total_rebounds DESC
+      LIMIT 5
+    `,
+  )
+
+  const assistsLeaders = await query(
+    `
+      SELECT p.id, p.name, p.image, s.assists, s.season
+      FROM stats_per_season s
+      JOIN player p
+      ON p.id = s.player_id
+      WHERE s.season = '2019-20'
+      ORDER BY s.assists DESC
+      LIMIT 5
+    `,
+  )
+
+  const blocksLeaders = await query(
+    `
+      SELECT p.id, p.name, p.image, s.blocks, s.season
+      FROM stats_per_season s
+      JOIN player p
+      ON p.id = s.player_id
+      WHERE s.season = '2019-20'
+      ORDER BY s.blocks DESC
+      LIMIT 5
+    `,
+  )
+
+  const stealsLeaders = await query(
+    `
+      SELECT p.id, p.name, p.image, s.steals, s.season
+      FROM stats_per_season s
+      JOIN player p
+      ON p.id = s.player_id
+      WHERE s.season = '2019-20'
+      ORDER BY s.steals DESC
+      LIMIT 5
+    `,
+  )
+
+  const fieldGoalPercentageLeaders = await query(
+    `
+      SELECT p.id, p.name, p.image, s.field_goal_percentage, s.season
+      FROM stats_per_season s
+      JOIN player p
+      ON p.id = s.player_id
+      WHERE s.season = '2019-20'
+      ORDER BY s.field_goal_percentage DESC
+      LIMIT 5
+    `,
+  )
+
+  return {
+    pointsLeaders,
+    reboundsLeaders,
+    assistsLeaders,
+    blocksLeaders,
+    stealsLeaders,
+    fieldGoalPercentageLeaders,
+  }
+}
+
 module.exports = {
   create,
   findAll,
+  findAllLeaders,
 }

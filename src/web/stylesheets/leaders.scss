@@ -1,0 +1,32 @@
+.leaders-categories__container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 50px;
+}
+
+.category__container {
+  margin-bottom: 18px;
+}
+
+.player__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.player__left {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.player__icon {
+  width: 30px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.player__name {
+  margin-left: 12px;
+}

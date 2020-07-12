@@ -10,6 +10,7 @@ import Player from './player'
 import PlayerPage from './player/page'
 import Standing from './standing'
 import PlayerComparison from './comparison'
+import Leaders from './leaders'
 
 import { store } from './store'
 import normalizeAxios from './services/normalizeAxios'
@@ -50,6 +51,7 @@ function App() {
             <Route exact path="/player/:id" component={PlayerPage} />
             <Route exact path="/standing" component={Standing} />
             <Route exact path="/comparison" component={PlayerComparison} />
+            <Route exact path="/leaders" component={Leaders} />
           </div>
         </div>
       </Router>

@@ -9,6 +9,7 @@
 @import './button.scss';
 @import './conferenceStanding.scss';
 @import './comparison.scss';
+@import './leaders.scss';
 
 body {
   margin: 0;

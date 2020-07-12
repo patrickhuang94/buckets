@@ -20,6 +20,9 @@ const Sidebar = () => {
           <Link to="/comparison">
             <p className="sidebar__menu-item">Player Comparison</p>
           </Link>
+          <Link to="/leaders">
+            <p className="sidebar__menu-item">Season Leaders</p>
+          </Link>
         </div>
       </div>
     </div>

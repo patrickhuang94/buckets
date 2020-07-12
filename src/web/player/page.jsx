@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Card, Spin } from 'antd'
+import Spinner from '../components/spinner'
 import normalizeAxios from '../services/normalizeAxios'
 
 const PlayerPage = () => {
@@ -21,11 +22,7 @@ const PlayerPage = () => {
   }, [])
 
   if (!player) {
-    return (
-      <div className="page__container">
-        <Spin />
-      </div>
-    )
+    return <Spinner />
   }
 
   return (

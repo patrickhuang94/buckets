@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Table, Input, Spin } from 'antd'
+import { Table, Input } from 'antd'
+import Spinner from '../components/spinner'
 import normalizeAxios from '../services/normalizeAxios'
 
 const Players = () => {
@@ -19,9 +20,11 @@ const Players = () => {
     fetchPlayers()
   }, [])
 
+  if (!players) return <Spinner />
+
   return (
     <div className="page__container">
-      {!players ? <Spin /> : <PlayersTable players={players} />}
+      <PlayersTable players={players} />
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Spinner from '../components/spinner'
 import useFetch from '../hooks/useFetch'
 
 const Leaders = () => {
@@ -7,7 +8,6 @@ const Leaders = () => {
   const [assistsLeaders, setAssistsLeaders] = useState([])
   const [blocksLeaders, setBlocksLeaders] = useState([])
   const [stealsLeaders, setStealsLeaders] = useState([])
-  const [fgLeaders, setFgLeaders] = useState([])
 
   useFetch('/leaders', { method: 'GET' }, (data) => {
     setPointsLeaders(data.pointsLeaders)
@@ -15,8 +15,9 @@ const Leaders = () => {
     setAssistsLeaders(data.assistsLeaders)
     setBlocksLeaders(data.blocksLeaders)
     setStealsLeaders(data.stealsLeaders)
-    setFgLeaders(data.fieldGoalPercentageLeaders)
   })
+
+  if (!pointsLeaders.length) return <Spinner />
 
   return (
     <div className="page__container">
@@ -46,11 +47,6 @@ const Leaders = () => {
           category="Steals Per Game"
           categoryKey="steals"
           players={stealsLeaders}
-        />
-        <LeaderCategory
-          category="Field Goal Percentage"
-          categoryKey="field_goal_percentage"
-          players={fgLeaders}
         />
       </div>
     </div>

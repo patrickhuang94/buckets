@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Spin } from 'antd'
+import { Table } from 'antd'
+import Spinner from '../components/spinner'
 
 import normalizeAxios from '../services/normalizeAxios'
 
@@ -58,12 +59,7 @@ const Standing = () => {
     fetchStandings()
   }, [])
 
-  if (!westernConference || !easternConference)
-    return (
-      <div className="page__container">
-        <Spin />
-      </div>
-    )
+  if (!westernConference || !easternConference) return <Spinner />
 
   const westernConferenceData = westernConference.map((team) => ({
     key: team.id,

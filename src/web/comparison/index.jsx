@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Card } from 'antd'
+
 import normalizeAxios from '../services/normalizeAxios'
 import SelectMenu from './selectMenu'
 import PlayerAvatar from './playerAvatar'
+// import BarChart from './barChart'
 
 const PlayerComparison = () => {
   const [players, setPlayers] = useState(null)
@@ -142,9 +144,9 @@ const Stats = ({ playerStats }) => {
       <h3>{playerStats.steals}</h3>
       <h3>{playerStats.blocks}</h3>
       <h3>{playerStats.turnovers}</h3>
-      <h3>{playerStats.field_goal_percentage}</h3>
-      <h3>{playerStats.three_point_field_goal_percentage}</h3>
-      <h3>{playerStats.free_throw_percentage}</h3>
+      <h3>{playerStats.field_goal_percentage || '-'}</h3>
+      <h3>{playerStats.three_point_field_goal_percentage || '-'}</h3>
+      <h3>{playerStats.free_throw_percentage || '-'}</h3>
     </div>
   )
 }

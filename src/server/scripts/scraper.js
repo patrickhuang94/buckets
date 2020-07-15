@@ -3,6 +3,7 @@ const PlayerController = require('../controllers/playerController')
 const TeamController = require('../controllers/teamController')
 const ConferenceStandingController = require('../controllers/conferenceStandingController')
 const StatsPerSeasonController = require('../controllers/statsPerSeasonController')
+const ScheduleController = require('../controllers/scheduleController')
 
 // const PlayerModel = require('../models/playerModel')
 // const StatsPerSeasonModel = require('../models/statsPerSeasonModel')
@@ -10,8 +11,16 @@ const StatsPerSeasonController = require('../controllers/statsPerSeasonControlle
 async function main() {
   console.log('Starting to scrape...')
   const browser = await puppeteer.launch()
-  await downloadPerGameStats(browser)
+  // await downloadPerGameStats(browser)
   // await downloadConferenceStandings(browser)
+  await downloadSchedule(
+    browser,
+    'https://www.basketball-reference.com/leagues/NBA_2020_games-july.html',
+  )
+  await downloadSchedule(
+    browser,
+    'https://www.basketball-reference.com/leagues/NBA_2020_games-august.html',
+  )
   await browser.close()
   console.log('Done!')
 }
@@ -351,6 +360,47 @@ async function newPage(browser) {
   })
 
   return page
+}
+
+async function downloadSchedule(browser, url) {
+  const page = await newPage(browser)
+
+  await page.goto(url, {
+    waitUntil: 'domcontentloaded',
+  })
+
+  await page.waitForSelector('table#schedule > tbody')
+
+  const schedules = await page.evaluate(() => {
+    const rows = Array.from(
+      document.querySelectorAll('table#schedule > tbody > tr'),
+    )
+
+    return rows.reduce((acc, row) => {
+      if (!row.classList.contains('thead')) {
+        const date = row.querySelector('th[data-stat="date_game"] > a')
+          .textContent
+        const startTime = row.querySelector('td[data-stat="game_start_time"]')
+          .textContent
+        const visitor = row.querySelector(
+          'td[data-stat="visitor_team_name"] > a',
+        ).textContent
+        const home = row.querySelector('td[data-stat="home_team_name"] > a')
+          .textContent
+        acc.push({ date, startTime, visitor, home })
+      }
+      return acc
+    }, [])
+  })
+
+  for (const schedule of schedules) {
+    await ScheduleController.create({
+      date: schedule.date,
+      start_time: schedule.startTime,
+      visitor: schedule.visitor,
+      home: schedule.home,
+    })
+  }
 }
 
 main()

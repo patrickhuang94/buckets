@@ -7,7 +7,7 @@ import SignUpForm from '../forms/signUpForm'
 function SignUp() {
   return (
     <div className="onboarding">
-      <Card title="Basket" className="onboarding__card">
+      <Card title="Buckets" className="onboarding__card">
         <div className="onboarding__form-container">
           <h3 className="onboarding__form-title">Create New Account</h3>
           <SignUpForm />

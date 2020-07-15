@@ -84,8 +84,10 @@ async function findAll({ id }) {
     `
       SELECT s.*, t.name as team_name, t.abbreviation as team_abbreviation
       FROM stats_per_season s 
+      JOIN player p
+      ON s.player_id = p.id
       FULL OUTER JOIN team t
-      ON s.team_id = t.id
+      ON p.team_id = t.id
       WHERE s.player_id = $1
     `,
     [id],

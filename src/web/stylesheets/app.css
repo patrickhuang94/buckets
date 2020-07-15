@@ -1,7 +1,6 @@
 @import '~antd/dist/antd.css';
 
 @import './dashboard.scss';
-@import './form.scss';
 @import './onboarding.scss';
 @import './player.scss';
 @import './headers.scss';

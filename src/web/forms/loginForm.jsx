@@ -2,30 +2,26 @@ import React, { useState, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import normalizeAxios from '../services/normalizeAxios'
 import { Form, Input, Button } from 'antd'
-const { Item } = Form
 import { store } from '../store'
 
 function LoginForm() {
   const history = useHistory()
-  const [fields, setFields] = useState({})
   const [error, setError] = useState(null)
-  const { state, dispatch } = useContext(store)
+  const { dispatch } = useContext(store)
 
-  const submitForm = async () => {
-    event.preventDefault()
+  const submitForm = async (values) => {
     const request = {
       method: 'POST',
       url: '/auth/login',
       data: {
-        email: fields.email,
-        password: fields.password,
+        email: values.email,
+        password: values.password,
       },
     }
 
     try {
       const user = await normalizeAxios(request)
       dispatch({ type: 'LOG_IN', payload: user })
-      console.log({ state })
       history.push('/')
     } catch (err) {
       const error = err.response && err.response.data
@@ -33,41 +29,31 @@ function LoginForm() {
     }
   }
 
-  const handleChange = (event, name) => {
-    event.persist()
-    setFields({
-      ...fields,
-      [name]: event.target.value,
-    })
-  }
-
-  const formInputItem = ({ label, placeholder, value, name, type }) => (
-    <Item>
-      <p className="form__input-label">{label}</p>
-      <Input placeholder={placeholder} value={value} onChange={(event) => handleChange(event, name)} type={type} />
-    </Item>
-  )
-
   return (
-    <Form onSubmit={submitForm}>
-      {formInputItem({
-        label: 'Email',
-        name: 'email',
-        placeholder: 'john@gmail.com',
-        value: fields.email,
-      })}
-      {formInputItem({
-        label: 'Password',
-        name: 'password',
-        value: fields.password,
-        type: 'password',
-      })}
-      <Item>
-        <Button type="primary" htmlType="submit" block disabled={!fields.email || !fields.password}>
+    <Form onFinish={submitForm}>
+      <Form.Item
+        label="Email"
+        name="email"
+        rules={[{ required: true, message: 'Please input your email!' }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="Password"
+        name="password"
+        rules={[{ required: true, message: 'Please input your password!' }]}
+      >
+        <Input.Password />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit" block>
           Log In
         </Button>
-      </Item>
-      <div style={{ marginBottom: '16px', height: '21px' }}>{error && <p style={{ color: 'salmon' }}>{error}</p>}</div>
+      </Form.Item>
+      <div style={{ marginBottom: '16px', height: '21px' }}>
+        {error && <p style={{ color: 'salmon' }}>{error}</p>}
+      </div>
     </Form>
   )
 }

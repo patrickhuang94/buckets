@@ -10,6 +10,7 @@
 @import './conferenceStanding.scss';
 @import './comparison.scss';
 @import './leaders.scss';
+@import './schedule.scss';
 
 body {
   margin: 0;
@@ -56,6 +57,11 @@ p {
 .flex-column {
   display: flex;
   flex-direction: column;
+}
+
+.flex__center {
+  display: flex;
+  align-items: center;
 }
 
 .flex-column__center {

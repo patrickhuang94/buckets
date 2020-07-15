@@ -23,6 +23,9 @@ const Sidebar = () => {
           <Link to="/leaders">
             <p className="sidebar__menu-item">Season Leaders</p>
           </Link>
+          <Link to="/schedule">
+            <p className="sidebar__menu-item">Schedule</p>
+          </Link>
         </div>
       </div>
     </div>

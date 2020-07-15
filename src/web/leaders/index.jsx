@@ -1,23 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Spinner from '../components/spinner'
 import useFetch from '../hooks/useFetch'
 
 const Leaders = () => {
-  const [pointsLeaders, setPointsLeaders] = useState([])
-  const [reboundsLeaders, setReboundsLeaders] = useState([])
-  const [assistsLeaders, setAssistsLeaders] = useState([])
-  const [blocksLeaders, setBlocksLeaders] = useState([])
-  const [stealsLeaders, setStealsLeaders] = useState([])
+  const { isFetched, data } = useFetch('/leaders')
 
-  useFetch('/leaders', { method: 'GET' }, (data) => {
-    setPointsLeaders(data.pointsLeaders)
-    setReboundsLeaders(data.reboundsLeaders)
-    setAssistsLeaders(data.assistsLeaders)
-    setBlocksLeaders(data.blocksLeaders)
-    setStealsLeaders(data.stealsLeaders)
-  })
-
-  if (!pointsLeaders.length) return <Spinner />
+  if (!isFetched) return <Spinner />
 
   return (
     <div className="page__container">
@@ -26,27 +14,27 @@ const Leaders = () => {
         <LeaderCategory
           category="Points Per Game"
           categoryKey="points"
-          players={pointsLeaders}
+          players={data.pointsLeaders}
         />
         <LeaderCategory
           category="Rebounds Per Game"
           categoryKey="total_rebounds"
-          players={reboundsLeaders}
+          players={data.reboundsLeaders}
         />
         <LeaderCategory
           category="Assists Per Game"
           categoryKey="assists"
-          players={assistsLeaders}
+          players={data.assistsLeaders}
         />
         <LeaderCategory
           category="Blocks Per Game"
           categoryKey="blocks"
-          players={blocksLeaders}
+          players={data.blocksLeaders}
         />
         <LeaderCategory
           category="Steals Per Game"
           categoryKey="steals"
-          players={stealsLeaders}
+          players={data.stealsLeaders}
         />
       </div>
     </div>

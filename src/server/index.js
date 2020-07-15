@@ -11,6 +11,7 @@ const player = require('./routes/player')
 const user = require('./routes/user')
 const conferenceStanding = require('./routes/conferenceStanding')
 const leaders = require('./routes/leaders')
+const schedule = require('./routes/schedule')
 
 app.listen(port, () => console.log(`Listening on port ${port}`))
 
@@ -22,5 +23,6 @@ app.use('/player', player)
 app.use('/user', user)
 app.use('/conference_standing', conferenceStanding)
 app.use('/leaders', leaders)
+app.use('/schedule', schedule)
 
 module.exports = app
